@@ -48,7 +48,7 @@ class SurveyCreateView(AccountMixin, CreateView):
 
     model = SurveyModel
     form_class = SurveyForm
-    slug_url_kwarg = 'survey'
+    pk_url_kwarg = 'survey'
     success_url = reverse_lazy('survey_list')
 
     def get_initial(self):
@@ -65,7 +65,7 @@ class SurveyDeleteView(DeleteView):
     Delete a survey
     """
     model = SurveyModel
-    slug_url_kwarg = 'survey'
+    pk_url_kwarg = 'survey'
     success_url = reverse_lazy('survey_list')
 
 
@@ -74,7 +74,7 @@ class SurveyListView(AccountMixin, ListView):
     List of surveys for an account.
     """
     model = SurveyModel
-    slug_url_kwarg = 'survey'
+    pk_url_kwarg = 'survey'
 
     def get_queryset(self):
         account = self.get_account()
@@ -95,10 +95,10 @@ class SurveyPublishView(RedirectView):
     """
 
     url = 'survey_list'
-    slug_url_kwarg = 'survey'
+    pk_url_kwarg = 'survey'
 
     def post(self, request, *args, **kwargs):
-        survey = get_object_or_404(SurveyModel, slug__exact=kwargs.get('slug'))
+        survey = get_object_or_404(SurveyModel, id__exact=kwargs.get('survey'))
         if survey.published:
             survey.published = False
             survey.end_date = datetime.datetime.now()
@@ -116,7 +116,7 @@ class SurveyResultView(DetailView):
     """
 
     model = SurveyModel
-    slug_url_kwarg = 'survey'
+    pk_url_kwarg = 'survey'
     template_name = 'survey/result.html'
 
     def get_context_data(self, **kwargs):
@@ -176,6 +176,13 @@ class SurveyResultView(DetailView):
                     else:
                         LOGGER.error("'%s' not found in %s", choice, aggregate)
 
+                elif question.question_type == Question.DROPDOWN:
+                    choice = answer.body
+                    if choice in aggregate:
+                        aggregate[choice] = aggregate[choice] + 1
+                    else:
+                        LOGGER.error("'%s' not found in %s", choice, aggregate)
+
                 elif question.question_type == Question.SELECT_MULTIPLE:
                     for choice in answer.get_multiple_choices():
                         if choice in aggregate:
@@ -215,7 +222,7 @@ class SurveySendView(SingleObjectMixin, FormView):
 
     model = SurveyModel
     form_class = SendSurveyForm
-    slug_url_kwarg = 'survey'
+    pk_url_kwarg = 'survey'
     template_name = 'survey/send.html'
     success_url = reverse_lazy('survey_list')
 
@@ -229,7 +236,7 @@ class SurveySendView(SingleObjectMixin, FormView):
         kwargs.update({'from_address': settings.DEFAULT_FROM_EMAIL,
             'message': "Please complete our quick survey at %s"
             % self.request.build_absolute_uri(
-                    reverse('survey_response_new', args=(self.object,)))})
+                    reverse('survey_response_new', args=(self.object.id,)))})
         return kwargs
 
     def form_valid(self, form):
@@ -248,5 +255,5 @@ class SurveyUpdateView(UpdateView):
 
     model = SurveyModel
     form_class = SurveyForm
-    slug_url_kwarg = 'survey'
+    pk_url_kwarg = 'survey'
     success_url = reverse_lazy('survey_list')

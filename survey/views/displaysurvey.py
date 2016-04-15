@@ -241,7 +241,7 @@ class ResponseUpdateView(SurveyModelMixin, IntervieweeMixin, UpdateView):
 
     model = Response
     form_class = ResponseUpdateForm
-    slug_url_kwarg = 'response'
+    pk_url_kwarg = 'response'
     next_step_url = 'survey_response_results'
     template_name = 'survey/response_update.html'
 

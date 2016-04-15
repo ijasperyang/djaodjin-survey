@@ -37,5 +37,6 @@ class RespondentListView(SurveyModelMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super(RespondentListView, self).get_context_data(**kwargs)
+        print self.get_survey()
         context.update({'survey': self.get_survey()})
         return context

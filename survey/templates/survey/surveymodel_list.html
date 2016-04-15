@@ -13,22 +13,22 @@
 	<tr href="#{{survey}}">
 		<td>{{survey.title}}</td>
 		<td>{{survey.description}}</td>
-		<td><a {% if survey.published %}disabled="true"{% endif %} href="{% url 'survey_edit' survey %}">Edit</a></td>
-		<td><a href="{% url 'survey_question_list' survey %}" >Questions</a></td>
+		<td><a {% if survey.published %}disabled="true"{% endif %} href="{% url 'survey_edit' survey.id %}">Edit</a></td>
+		<td><a href="{% url 'survey_question_list' survey.id %}" >Questions</a></td>
 		<td>
-			<form method="post" action="{% url 'survey_publish' survey %}">
+			<form method="post" action="{% url 'survey_publish' survey.id %}">
 				<input type="submit" {% if not survey.has_questions %}disabled="true"{% endif %} value="{% if survey.published %}Unpublish{% else %}Publish{% endif %}" />
 				{% csrf_token %}
 			</form>
 		</td>
 		<td>
-			<a href="{% url 'survey_send' survey %}" {% if not survey.published %}disabled="true"{% endif %}>Send</a>
+			<a href="{% url 'survey_send' survey.id %}" {% if not survey.published %}disabled="true"{% endif %}>Send</a>
 		</td>
 		<td>
-			<a href="{% url 'survey_result' survey %}">Results</a>
+			<a href="{% url 'survey_result' survey.id %}">Results</a>
 		</td>
 		<td>
-			<form method="post" action="{% url 'survey_delete' survey %}">
+			<form method="post" action="{% url 'survey_delete' survey.id %}">
 				<input type="submit" {% if survey.published %}disabled="true"{% endif %} value="Delete" />
 				{% csrf_token %}
 			</form>

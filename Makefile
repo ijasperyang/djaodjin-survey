@@ -38,4 +38,5 @@ install::
 # correctly.
 initdb:
 	-rm -f db.sqlite3
-	cd $(srcDir) && $(PYTHON) ./manage.py syncdb
+	#cd $(srcDir) && $(PYTHON) ./manage.py syncdb
+	cd $(srcDir) && $(PYTHON) ./manage.py migrate

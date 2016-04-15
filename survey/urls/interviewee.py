@@ -30,7 +30,7 @@ from survey.views.displaysurvey import (AnswerUpdateView, ResponseCreateView,
 SLUG_RE = '[a-zA-Z0-9-]+'
 
 
-urlpatterns = patterns('',
+urlpatterns = [
    url(r'^(?P<survey>%s)/(?P<response>%s)/reset/' % (SLUG_RE, SLUG_RE),
        ResponseResetView.as_view(), name='survey_response_reset'),
    url(r'^(?P<survey>%s)/(?P<response>%s)/results/' % (SLUG_RE, SLUG_RE),
@@ -42,4 +42,4 @@ urlpatterns = patterns('',
        ResponseUpdateView.as_view(), name='survey_response_update'),
    url(r'^(?P<survey>%s)/' % SLUG_RE,
        ResponseCreateView.as_view(), name='survey_response_new'),
-)
+]

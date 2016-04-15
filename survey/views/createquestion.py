@@ -48,14 +48,14 @@ class QuestionFormMixin(QuestionMixin):
         """
         kwargs = super(QuestionFormMixin, self).get_initial()
         self.survey = get_object_or_404(
-            SurveyModel, slug__exact=self.kwargs.get('survey'))
+            SurveyModel, id__exact=self.kwargs.get('survey'))
         last_index = Question.objects.filter(survey=self.survey).count()
-        kwargs.update({'survey': self.survey,
+        kwargs.update({'survey': self.survey.id,
                        'order': last_index + 1})
         return kwargs
 
     def get_success_url(self):
-        return reverse(self.success_url, args=(self.object.survey,))
+        return reverse(self.success_url, args=(self.object.survey.id,))
 
 
 class QuestionCreateView(QuestionFormMixin, CreateView):
@@ -72,7 +72,7 @@ class QuestionDeleteView(QuestionMixin, DeleteView):
     success_url = 'survey_question_list'
 
     def get_success_url(self):
-        return reverse(self.success_url, args=(self.object.survey,))
+        return reverse(self.success_url, args=(self.object.survey.id,))
 
 
 class QuestionListView(SurveyModelMixin, ListView):
@@ -132,4 +132,4 @@ class QuestionUpdateView(QuestionFormMixin, UpdateView):
     """
     Update a question
     """
-    pass
+    #pass

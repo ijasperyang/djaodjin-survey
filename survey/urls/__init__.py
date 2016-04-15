@@ -28,8 +28,9 @@ URLs for djaodjin-survey django app
 
 from django.conf.urls import patterns, include, url
 
-urlpatterns = patterns(
-    'survey.views',
-    url(r'^manage/', include('survey.urls.manager')),
+urlpatterns = [ 
+        #'survey.views',
+    #url(r'^manage/', include('survey.urls.manager')),
+    url(r'^manager/', include('survey.urls.manager')),
     url(r'^', include('survey.urls.interviewee')),
-)
+]

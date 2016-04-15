@@ -22,7 +22,7 @@
 # OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
 from survey.views.createsurvey import (SurveyCreateView, SurveyDeleteView,
     SurveyListView, SurveyPublishView, SurveyResultView, SurveySendView,
@@ -32,35 +32,35 @@ from survey.views.createquestion import (QuestionCreateView, QuestionDeleteView,
 from survey.views.response import RespondentListView
 
 
-urlpatterns = patterns('',
-   url(r'^new/',
+urlpatterns = [
+   url(r'^new/$',
        SurveyCreateView.as_view(), name='survey_create'),
-   url(r'^(?P<survey>[a-zA-Z0-9-]+)/send/',
+   url(r'^(?P<survey>\d+)/send/$',
        SurveySendView.as_view(), name='survey_send'),
-   url(r'^(?P<survey>[a-zA-Z0-9-]+)/result/',
+   url(r'^(?P<survey>\d+)/result/$',
        SurveyResultView.as_view(), name='survey_result'),
-   url(r'^(?P<survey>[a-zA-Z0-9-]+)/respondents/',
+   url(r'^(?P<survey>\d+)/respondents/$',
        RespondentListView.as_view(), name='survey_respondent_list'),
-   url(r'^(?P<survey>[a-zA-Z0-9-]+)/publish/',
+   url(r'^(?P<survey>\d+)/publish/$',
        SurveyPublishView.as_view(), name='survey_publish'),
-   url(r'^(?P<survey>[a-zA-Z0-9-]+)/edit/',
+   url(r'^(?P<survey>\d+)/edit/$',
        SurveyUpdateView.as_view(), name='survey_edit'),
-   url(r'^(?P<survey>[a-zA-Z0-9-]+)/delete/',
+   url(r'^(?P<survey>\d+)/delete/$',
        SurveyDeleteView.as_view(), name='survey_delete'),
 
-   url(r'^(?P<survey>[a-zA-Z0-9-]+)/new/',
+   url(r'^(?P<survey>\d+)/new/$',
        QuestionCreateView.as_view(), name='survey_question_new'),
-   url(r'^(?P<survey>[a-zA-Z0-9-]+)/(?P<num>\d+)/down/',
+   url(r'^(?P<survey>\d+)/(?P<num>\d+)/down/$',
        QuestionRankView.as_view(), name='survey_question_down'),
-   url(r'^(?P<survey>[a-zA-Z0-9-]+)/(?P<num>\d+)/up/',
+   url(r'^(?P<survey>\d+)/(?P<num>\d+)/up/$',
        QuestionRankView.as_view(direction=-1), name='survey_question_up'),
-   url(r'^(?P<survey>[a-zA-Z0-9-]+)/(?P<num>\d+)/delete/',
+   url(r'^(?P<survey>\d+)/(?P<num>\d+)/delete/$',
        QuestionDeleteView.as_view(), name='survey_question_delete'),
-   url(r'^(?P<survey>[a-zA-Z0-9-]+)/(?P<num>\d+)/edit/',
+   url(r'^(?P<survey>\d+)/(?P<num>\d+)/edit/$',
        QuestionUpdateView.as_view(), name='survey_question_edit'),
 
-   url(r'^(?P<survey>[a-zA-Z0-9-]+)/',
+   url(r'^(?P<survey>\d+)/$',
        QuestionListView.as_view(), name='survey_question_list'),
    url(r'^',
        SurveyListView.as_view(), name='survey_list'),
-)
+]

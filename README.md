@@ -15,7 +15,8 @@ The source code is bundled with a sample django project.
     $ source bin/activate
     $ pip install -r requirements.txt
 
-    $ python manage.py syncdb
+    $ python manage.py migrate
+    $ python manage.py createsuperuser (optional)
     $ python manage.py runserver
 
     # Visit url at http://localhost:8000/

@@ -59,7 +59,7 @@ def _create_field(question_type, text,
             fields = (radio, None)
     elif question_type == Question.SELECT_MULTIPLE:
         multiple = forms.MultipleChoiceField(label=text, required=required,
-            widget=forms.CheckboxSelectMultiple, choices=choices)
+                widget=forms.CheckboxSelectMultiple, choices=choices)
         if has_other:
             fields = (multiple, forms.CharField(required=False,
                 label="Please could you specify?",
@@ -108,7 +108,8 @@ class QuestionForm(forms.ModelForm):
 
     def save(self, commit=True):
         if self.initial.has_key('survey'):
-            self.instance.survey = self.initial['survey']
+            self.instance.survey = SurveyModel.objects.get(id=self.initial['survey'])
+            #self.instance.survey = self.initial['survey']
         if self.initial.has_key('order') and not self.instance.order:
             self.instance.order = self.initial['order']
         return super(QuestionForm, self).save(commit)
@@ -155,6 +156,7 @@ class ResponseCreateForm(forms.ModelForm):
         if self.initial.has_key('user'):
             self.instance.user = self.initial['user']
         if self.initial.has_key('survey'):
+            #self.instance.survey = SurveyModel.objects.get(id=self.initial['survey'])
             self.instance.survey = self.initial['survey']
         self.instance.slug = slugify(uuid.uuid4().hex)
         return super(ResponseCreateForm, self).save(commit)

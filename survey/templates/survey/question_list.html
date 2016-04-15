@@ -6,7 +6,7 @@
 		<h1>Questions for {{survey.title}}</h1>
 	</div>
 
-	<p><a href="{% url 'survey_question_new' survey %}">Add a question</a></p>
+	<p><a href="{% url 'survey_question_new' survey.id %}">Add a question</a></p>
 	<table>
 		<tr>
 			<th>Question</th>
@@ -24,21 +24,21 @@
 			<td>{{question.text}}</td>
 			<td>{{question.question_type}}</td>
 			<td>{% if question.choices %}{{question.choices}}{% else %}N/A{% endif %}</td>
-			<td><a href="{% url 'survey_question_edit' survey question.id %}" >Edit</a></td>
+			<td><a href="{% url 'survey_question_edit' survey.id question.id %}" >Edit</a></td>
 			<td>
-				<form method="post" action="{% url 'survey_question_delete' survey question.id %}">
+				<form method="post" action="{% url 'survey_question_delete' survey.id question.id %}">
 					<input type="submit" value="Delete" />
 					{% csrf_token %}
 				</form>
 			</td>
 			<td>
-				<form method="post" action="{% url 'survey_question_up' survey question.id %}">
+				<form method="post" action="{% url 'survey_question_up' survey.id question.id %}">
 					<input type="submit" value="Up" />
 					{% csrf_token %}
 				</form>
 			</td>
 			<td>
-				<form method="post" action="{% url 'survey_question_down' survey question.id %}">
+				<form method="post" action="{% url 'survey_question_down' survey.id question.id %}">
 					<input type="submit" value="Down" />
 					{% csrf_token %}
 				</form>

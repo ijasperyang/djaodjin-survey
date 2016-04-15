@@ -24,6 +24,7 @@
 
 import datetime, uuid
 
+from django.utils.encoding import python_2_unicode_compatible
 from django.db import transaction
 from django.db import models, IntegrityError
 from django.template.defaultfilters import slugify
@@ -32,7 +33,7 @@ from durationfield.db.models.fields.duration import DurationField
 
 from .settings import AUTH_USER_MODEL, ACCOUNT_MODEL
 
-
+@python_2_unicode_compatible
 class SurveyModel(models.Model):
     #pylint: disable=super-on-old-class
 
@@ -55,6 +56,9 @@ class SurveyModel(models.Model):
 
     def __unicode__(self):
         return self.slug
+
+    def __str__(self):
+        return "%s" % self.slug
 
     def has_questions(self):
         return Question.objects.filter(survey=self).exists()
@@ -95,7 +99,6 @@ class SurveyModel(models.Model):
                         self.slug = '%s-%d' % (
                             slug[:(max_length-len(prefix))], num)
                     num = num + 1
-
 
 class Question(models.Model):
 
@@ -214,15 +217,18 @@ class AnswerManager(models.Manager):
         """
         answers = list(self.filter(response=response))
         if response.survey:
-            questions = Question.objects.filter(survey=response.survey).extra(
-                where=["(survey_answer.question_id IS NULL)"])
+            #questions = Question.objects.filter(survey=response.survey).extra(
+            #    where=["(survey_answer.question_id IS NULL)"])
+            questions = Question.objects.filter(survey=response.survey, answer__question__isnull=True)#.extra(
+            #    where=["('survey_answer'.'question_id' IS NULL)"])
             # XXX check this is True (1.6) JOIN these tables on these fields
             #pylint: disable=protected-access
-            connection = (None, Answer._meta.db_table, (("id", "question_id"),))
+            #connection = (None, Answer._meta.db_table, (("id", "question_id"),))
             # Django 1.7 (see commit ba6c9fae452d3e4260ed0c1c74230da74f74f665)
             # removed outer_if_first, and instead always create new joins
             # as OUTER.
-            questions.query.join(connection)    # as LEFT OUTER JOIN
+            #print questions.query
+            #questions.query.join(connection)    # as LEFT OUTER JOIN
             for question in questions:
                 answers += [Answer(question=question)]
         return answers
