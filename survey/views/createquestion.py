@@ -132,4 +132,4 @@ class QuestionUpdateView(QuestionFormMixin, UpdateView):
     """
     Update a question
     """
-    #pass
+    pass

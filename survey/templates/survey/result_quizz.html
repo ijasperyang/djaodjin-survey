@@ -19,7 +19,11 @@
 		{% if answer.question.get_choices %}
 		{% for choice in answer.question.get_choices %}
 		<div>
+		    {% if answer.question.question_type == 'select' %}
+			<input type="radio" disabled="true" {% if choice.0 in answer.body %}checked="true"{% endif %}>
+		    {% else %}
 			<input type="{{ answer.question.question_type }}" disabled="true" {% if choice.0 in answer.body %}checked="true"{% endif %}>
+		    {% endif %}
 			<span>{{choice.0}}
 			{% if response.survey.quizz_mode %}
 				{% if choice.0 in answer.question.get_correct_answer %}

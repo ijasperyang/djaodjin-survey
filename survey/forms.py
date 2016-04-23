@@ -29,6 +29,8 @@ import uuid
 
 from django import forms
 from django.template.defaultfilters import slugify
+from django.utils import six
+from unidecode import unidecode
 
 from survey.models import Answer, Question, Response, SurveyModel
 
@@ -193,8 +195,9 @@ class SurveyForm(forms.ModelForm):
     def clean_title(self):
         """
         Creates a slug from the survey title and checks it does not yet exists.
+        allow_unicode=True only for Django 1.9 and later
         """
-        slug = slugify(self.cleaned_data.get('title'))
+        slug = slugify(unidecode(six.text_type(self.cleaned_data.get('title'))))
         if SurveyModel.objects.filter(slug__exact=slug).exists():
             raise forms.ValidationError(
                 "Title conflicts with an existing survey.")
@@ -203,7 +206,7 @@ class SurveyForm(forms.ModelForm):
     def save(self, commit=True):
         if self.initial.has_key('account'):
             self.instance.account = self.initial['account']
-        self.instance.slug = slugify(self.cleaned_data.get('title'))
+        self.instance.slug = slugify(unidecode(six.text_type(self.cleaned_data.get('title'))))
         return super(SurveyForm, self).save(commit)
 
 

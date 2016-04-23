@@ -136,12 +136,14 @@ class SurveyResultView(DetailView):
         for question in Question.objects.filter(
             survey=self.object, question_type=Question.TEXT):
             individuals += [{
-                 'key': slugify("%d" % question.order),
+                #'key': slugify("%d" % question.id),
+                 'key': question.id,
 # XXX Might be better
 #                'key': slugify("%s-%d"
 #                    % (question.survey.slug, question.order)),
                 'values': Answer.objects.filter(
-                    question=question).values('body')}]
+                    #question=question).values('body')}]
+                    question=question)}]
 
         # Aggregate results for questions which have a fixed given number of
         # possible choices.

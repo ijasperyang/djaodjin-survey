@@ -1,3 +1,5 @@
 Django>=1.6
 django-durationfield>=0.4
 django-urldecorators
+# For converting non-ASCII to ASCII when creating slugs
+Unidecode>=0.04.12,<0.05,

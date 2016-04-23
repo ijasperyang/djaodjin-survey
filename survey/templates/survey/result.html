@@ -50,11 +50,11 @@
 		{% for question in questions %}
 		<div id="{{question.order}}">
 			<h3>#{{question.order}} : {{ question.text }}</h3>
-		{% if question.question_type == Question.TEXT %}
+		{% if question.question_type == 'text' %}
 			<table>
-				{% for answer_body in individuals|by_key:question.order %}
+				{% for answer_body in individuals|by_key:question.id %}
 				<tr>
-					<td>{{answer_body}}</td>
+					<td>{{answer_body.body}}</td>
 				</tr>
 				{% endfor %}
 			</table>

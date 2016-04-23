@@ -92,12 +92,12 @@ class QuestionMixin(SingleObjectMixin):
         """
         Returns a question object based on the URL.
         """
-        index = self.kwargs.get(self.num_url_kwarg, 1)
+        qid = self.kwargs.get(self.num_url_kwarg, 1)
         id = self.kwargs.get(self.survey_url_kwarg, None)
         survey = get_object_or_404(
             SurveyModel, id__exact=id)
         return get_object_or_404(
-            Question, survey=survey, order=index)
+            Question, survey=survey, id=qid)
 
 
 class SurveyModelMixin(object):
@@ -125,11 +125,11 @@ class ResponseMixin(IntervieweeMixin, SurveyModelMixin):
         if not url_kwarg:
             url_kwarg = self.response_url_kwarg
         response = None
-        response_id = self.kwargs.get(url_kwarg)
-        if response_id:
+        response_slug = self.kwargs.get(url_kwarg)
+        if response_slug:
             # We have an id for the response, let's get it and check
             # the user has rights to it.
-            response = get_object_or_404(Response, id=response_id)
+            response = get_object_or_404(Response, slug=response_slug)
         else:
             # Well no id, let's see if we can find a response from
             # a survey slug and a user
